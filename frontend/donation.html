@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Donate — TTD</title>
+  <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+<div id="nav-placeholder"></div>
+
+<div class="page-hero">
+  <h1>💛 Make a Donation</h1>
+  <p>Support Annadanam, Go Samrakshana, and other divine causes</p>
+</div>
+
+<section class="section" style="padding:2rem 1rem;">
+  <div class="container">
+
+    <!-- STEP WIZARD -->
+    <div class="steps mb-3">
+      <div class="step active" id="sw1"><div class="step-num">1</div><div class="step-lbl">Donation Details</div></div>
+      <div class="step" id="sw2"><div class="step-num">2</div><div class="step-lbl">Payment</div></div>
+      <div class="step" id="sw3"><div class="step-num">3</div><div class="step-lbl">Confirmed</div></div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════
+         STEP 1 — Donation Details
+    ══════════════════════════════════════════════════ -->
+    <div id="step1">
+      <div class="form-box xl" style="width:100%;">
+        <div id="alertS1" class="alert"></div>
+
+        <div class="f-row mb-2">
+          <!-- DONATION TYPE -->
+          <div class="f-group">
+            <label>Donation Trust / Scheme <span class="req">*</span></label>
+            <select id="donationType" class="f-ctrl">
+              <option value="">— Select Trust —</option>
+              <option value="S.V. Annaprasadam Trust">S.V. Annaprasadam Trust (Free Food)</option>
+              <option value="S.V. Go Samrakshana Trust">S.V. Go Samrakshana Trust (Cow Protection)</option>
+              <option value="S.V. Veda Parirakshana Trust">S.V. Veda Parirakshana Trust (Vedic Education)</option>
+              <option value="Balaji Institute of Surgery">Balaji Institute of Surgery (Medical)</option>
+              <option value="General Donation">General Donation to Srivari Hundi</option>
+            </select>
+          </div>
+          <!-- AMOUNT -->
+          <div class="f-group">
+            <label>Amount (₹) <span class="req">*</span></label>
+            <input type="number" id="donationAmount" class="f-ctrl" min="10" placeholder="Enter amount"/>
+          </div>
+        </div>
+
+        <div class="f-group">
+          <label>Donor Remarks / Message (Optional)</label>
+          <textarea id="donorRemarks" class="f-ctrl" rows="3" placeholder="Any special occasion?"></textarea>
+        </div>
+
+        <div class="text-center mt-3">
+          <button class="btn btn-red" onclick="goStep2()">
+            Proceed to Payment →
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════
+         STEP 2 — Payment
+    ══════════════════════════════════════════════════ -->
+    <div id="step2" class="d-none">
+      <div class="form-box" style="width:100%;">
+        <div id="alertS2" class="alert"></div>
+
+        <div class="pay-summary">
+          <h4>Payment Summary</h4>
+          <div class="pay-row"><span>Donation Type</span><span id="payType"></span></div>
+          <div class="pay-row total"><span>TOTAL AMOUNT</span><span id="payTotal"></span></div>
+        </div>
+
+        <label style="font-size:0.82rem;font-weight:700;display:block;margin-bottom:0.7rem;">Select Payment Method</label>
+        <div class="pay-methods" id="payMethods">
+          <div class="pay-method" onclick="selMethod('upi',this)"><span class="pm-icon">📱</span>UPI</div>
+          <div class="pay-method" onclick="selMethod('netbanking',this)"><span class="pm-icon">🏦</span>Net Banking</div>
+          <div class="pay-method" onclick="selMethod('debit_card',this)"><span class="pm-icon">💳</span>Debit Card</div>
+          <div class="pay-method" onclick="selMethod('credit_card',this)"><span class="pm-icon">💳</span>Credit Card</div>
+          <div class="pay-method" onclick="selMethod('wallet',this)"><span class="pm-icon">👝</span>Wallet</div>
+        </div>
+
+        <div class="flex gap-2 mt-2" style="flex-wrap:wrap;">
+          <button class="btn btn-outline-red" onclick="goStep1()">← Back</button>
+          <button id="payBtn" class="btn btn-green" onclick="doPayment()">
+            <span class="btn-text">Donate Now 🙏</span>
+            <div class="spin" style="border-top-color:white;"></div>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════
+         STEP 3 — Confirmed
+    ══════════════════════════════════════════════════ -->
+    <div id="step3" class="d-none">
+      <div class="form-box" style="width:100%;text-align:center;">
+        <div style="font-size:4rem;margin-bottom:1rem;">🎉</div>
+        <h2 style="font-family:'Cinzel',serif;color:var(--red);margin-bottom:0.5rem;">Donation Successful!</h2>
+        <p style="color:var(--muted);font-size:0.88rem;margin-bottom:1.5rem;">Thank you for your generous contribution.</p>
+
+        <div style="background:#fff9f0;border:1px solid var(--border);border-radius:8px;padding:1.2rem;text-align:left;margin-bottom:1.5rem;font-size:0.84rem;">
+          <div class="flex-between mb-1"><span class="text-muted">Transaction ID</span><span class="fw-700 text-red" id="confTxn"></span></div>
+          <div class="flex-between mb-1"><span class="text-muted">Donation Trust</span><span class="fw-600" id="confType"></span></div>
+          <div class="flex-between"><span class="text-muted">Amount Donated</span><span class="fw-700 text-red" id="confAmount"></span></div>
+        </div>
+
+        <div class="flex gap-2" style="justify-content:center;flex-wrap:wrap;">
+          <a href="dashboard.html" class="btn btn-red">View My Dashboard</a>
+          <button class="btn btn-outline-red" onclick="resetAll()">Donate Again</button>
+        </div>
+        <p style="margin-top:1rem;font-size:1.5rem;color:var(--gold-dk);">ॐ नमो वेङ्कटेशाय 🙏</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand"><h3>🛕 TTD</h3><p>Tirumala Tirupati Devasthanams.</p></div>
+    <div class="footer-col"><h4>Links</h4><ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="darshan.html">Book Darshan</a></li>
+      <li><a href="accommodation.html">Accommodation</a></li>
+    </ul></div>
+  </div>
+  <div class="footer-bottom"><span>© 2025 TTD</span></div>
+</footer>
+
+<script src="js/nav.js"></script>
+<script src="js/main.js"></script>
+<script>
+let selPayMethod = null;
+
+document.addEventListener('DOMContentLoaded', () => {
+  requireLogin();
+});
+
+function setStep(n) {
+  [1,2,3].forEach(i => {
+    document.getElementById('step' + i).classList.toggle('d-none', i !== n);
+    const sw = document.getElementById('sw' + i);
+    sw.classList.remove('active','done');
+    if (i < n)  sw.classList.add('done');
+    if (i === n) sw.classList.add('active');
+  });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function goStep1() { setStep(1); }
+
+function goStep2() {
+  const type   = document.getElementById('donationType').value;
+  const amount = document.getElementById('donationAmount').value;
+  
+  if (!type) return showAlert('alertS1', 'Please select a donation trust/scheme.');
+  if (!amount || Number(amount) < 10) return showAlert('alertS1', 'Please enter a valid amount (minimum ₹10).');
+
+  document.getElementById('payType').textContent = type;
+  document.getElementById('payTotal').textContent = fMoney(amount);
+  setStep(2);
+}
+
+function selMethod(method, el) {
+  selPayMethod = method;
+  document.querySelectorAll('.pay-method').forEach(e => e.classList.remove('sel'));
+  el.classList.add('sel');
+}
+
+async function doPayment() {
+  if (!requireLogin()) return;
+  if (!selPayMethod) return showAlert('alertS2', 'Please select a payment method.');
+
+  const type    = document.getElementById('donationType').value;
+  const amount  = document.getElementById('donationAmount').value;
+  const remarks = document.getElementById('donorRemarks').value;
+
+  btnLoading('payBtn', true, 'Processing...');
+  try {
+    const data = await api('POST', '/donation', {
+      donation_type: type,
+      amount:        amount,
+      remarks:       remarks,
+      payment_method: selPayMethod
+    });
+
+    if (data.success) {
+      document.getElementById('confTxn').textContent     = data.transaction_id;
+      document.getElementById('confType').textContent    = type;
+      document.getElementById('confAmount').textContent  = fMoney(amount);
+      setStep(3);
+    } else {
+      showAlert('alertS2', data.message || 'Donation failed.');
+    }
+  } catch {
+    showAlert('alertS2', 'Network error. Please try again.');
+  } finally {
+    btnLoading('payBtn', false, 'Donate Now 🙏');
+  }
+}
+
+function resetAll() {
+  selPayMethod = null;
+  document.getElementById('donationType').value = '';
+  document.getElementById('donationAmount').value = '';
+  document.getElementById('donorRemarks').value = '';
+  document.querySelectorAll('.pay-method').forEach(e => e.classList.remove('sel'));
+  setStep(1);
+}
+</script>
+</body>
+</html>

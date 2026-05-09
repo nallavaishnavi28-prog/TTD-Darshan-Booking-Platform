@@ -1,0 +1,24 @@
+services:
+  # Backend Web Service
+  - type: web
+    name: ttd-backend
+    env: python
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: cd backend && gunicorn app:app
+    envVars:
+      - key: MONGO_URI
+        value: mongodb+srv://admin:test123@cluster0.zr7eukd.mongodb.net/ttd?appName=Cluster0
+      - key: JWT_SECRET
+        generateValue: true
+      - key: PORT
+        value: 5000
+    
+  # Frontend Static Site
+  - type: web
+    name: ttd-frontend
+    env: static
+    buildCommand: "" # No build step for simple HTML/JS
+    staticPublishPath: ./frontend
+    envVars:
+      - key: API_URL
+        value: https://ttd-backend.onrender.com # Change this if your backend gets a different URL on Render
