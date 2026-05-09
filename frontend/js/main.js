@@ -1,6 +1,6 @@
 // Constants
 const IS_LOCAL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-const API_URL = IS_LOCAL ? 'http://localhost:5000' : 'https://ttd-backend.onrender.com';
+const API_URL = IS_LOCAL ? 'http://localhost:5000' : 'https://ttd-darshan-booking-platform-3.onrender.com';
 
 // Auth
 function getToken() {
